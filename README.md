@@ -5,35 +5,58 @@ Custom version of NS-3 and specified version of ndnSIM needs to be installed.
 
 The code should also work with the latest version of ndnSIM, but it is not guaranteed.
 
-    mkdir ndnSIM
-    cd ndnSIM
-
+    # Checkout latest version of ndnSIM
+    mdkir persistent-interests
+    cd persistent-interests
     git clone https://github.com/named-data-ndnSIM/ns-3-dev.git ns-3
     git clone https://github.com/named-data-ndnSIM/pybindgen.git pybindgen
-    git clone -b ndnSIM-2.3 --recursive https://github.com/named-data-ndnSIM/ndnSIM ns-3/src/ndnSIM
+    git clone --recursive https://github.com/named-data-ndnSIM/ndnSIM.git ns-3/src/ndnSIM
 
-    # Build and install NS-3 and ndnSIM
+    # Set correct version for ndnSIM and compile it
     cd ns-3
+    git checkout 2c66f4c
+    cd src/ndnSIM/
+    git checkout a9d889b
+    cd NFD/
+    git checkout 85d60eb
+    cd ../ndn-cxx/
+    git checkout 787be41
+    cd ../../../
     ./waf configure -d optimized
     ./waf
     sudo ./waf install
 
-    # When using Linux, run
-    # sudo ldconfig
-
-    # When using Freebsd, run
-    # sudo ldconfig -a
-
+    # Checkout persistent-interest scenario
     cd ..
-    git clone https://github.com/named-data-ndnSIM/scenario-template.git my-simulations
-    cd my-simulations
+    git clone git@gitlab.itec.aau.at:philipp-moll/PI-scenario.git
+    cd PI-scenario
 
+    # Patch ndnSIM, NFD and ndn-cxx
+    cp extern/tag-host.hpp ../ns-3/src/ndnSIM/ndn-cxx/src/
+    cp extern/interest.* ../ns-3/src/ndnSIM/ndn-cxx/src/
+    cp extern/data.* ../ns-3/src/ndnSIM/ndn-cxx/src/
+    cp extern/tlv.hpp ../ns-3/src/ndnSIM/ndn-cxx/src/encoding/
+    cp extern/qci.hpp ../ns-3/src/ndnSIM/ndn-cxx/src/encoding/
+
+    cp extern/forwarder.cpp ../ns-3/src/ndnSIM/NFD/daemon/fw/
+    cp extern/pit* ../ns-3/src/ndnSIM/NFD/daemon/table/
+    cp extern/retx-suppression-exponential.cpp ../ns-3/src/ndnSIM/NFD/daemon/fw/
+
+    cp extern/ndn-producer.hpp ../ns-3/src/ndnSIM/apps/
+    cp extern/*tracer* ../ns-3/src/ndnSIM/utils/tracers/
+
+    cp extern/queue.h ../ns-3/src/network/utils/
+
+    # Recompile ndnSIM
+    cd ../ns-3/
+    ./waf
+    sudo ./waf install
+
+    # Compile and run scenario
+    cd ../PI-scenario
     ./waf configure
-    ./waf --run scenario
-
-After which you can proceed to compile and run the code
-
-For more information how to install NS-3 and ndnSIM, please refer to http://ndnsim.net website.
+    ./waf
+    ./waf --run=push-simple --vis
 
 Compiling
 =========
