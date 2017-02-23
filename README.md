@@ -1,7 +1,5 @@
-Prerequisites
-=============
-
-Custom version of NS-3 and specified version of ndnSIM needs to be installed.
+Installing and patching ndnSIM
+==============================
 
 The code should also work with the latest version of ndnSIM, but it is not guaranteed.
 
