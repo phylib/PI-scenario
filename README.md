@@ -1,3 +1,8 @@
+This repositories contains implementations for the following concepts and features for NDN:
+- Persistent Interests (PI) including a sample PushClient and PushServer
+- QoS Class Identifier (QCI), enabling QoS features in NDN
+- Multiple network-level queueing strategies for ndnSIM
+
 Installing and patching ndnSIM
 ==============================
 
@@ -49,7 +54,7 @@ The code should also work with the latest version of ndnSIM, but it is not guara
     cd ../ns-3/
     ./waf
     sudo ./waf install
-
+    
     # Compile and run scenario
     cd ../PI-scenario
     ./waf configure
