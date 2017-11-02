@@ -31,7 +31,7 @@ The code should also work with the latest version of ndnSIM, but it is not guara
 
     # Checkout persistent-interest scenario
     cd ..
-    git clone git@gitlab.itec.aau.at:philipp-moll/PI-scenario.git
+    git clone https://github.com/phylib/PI-scenario.git
     cd PI-scenario
 
     # Patch ndnSIM, NFD and ndn-cxx
